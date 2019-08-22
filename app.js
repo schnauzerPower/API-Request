@@ -1,7 +1,8 @@
 const modalContainer = document.createElement('div');
 modalContainer.classList.add('modal-container');
 const gallery = document.getElementById('gallery');
-let htmlBank = new HTMLBank();
+let htmlBank = new HTMLBank();  //I CREATE A NEW HTMLBank OBJECT BUT I GET AN ERROR SAYING IT IS UNDEFINED. IT WORKS WHEN INSTANTIATE IT 
+                               //IN THE GENERATEGALLERY FUNCTION BELOW BUT THEN I CAN'T ACCESS THE CLASS FROM ANY OTHER METHODS.
 
 fetch('https://randomuser.me/api/?results=12')
     .then(response => response.json())
@@ -71,7 +72,7 @@ function createModal(results) {
 }
 
 function generateGallery(results) {
-    
+    //I CAN INSTANTIATE THE HTMLBank OBJECT WITHOUT ANY PROBLEMS HERE BUT THEN ITS OUT OF SCOPE IN OTHER METHODS.
     htmlBank.getGalleryHTML(results);
     /*let html = ''
     let cardId = 0; //An ID will be assigned to each rendered card. This is meant to make it easier to get the correct information in the modal.
