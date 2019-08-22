@@ -29,7 +29,7 @@ class HTMLBank {
         gallery.innerHTML = html;
     }
     
-    getModalHTML(results, index) {
+    getInitialModalHTML(results, index) {
         let html = `
                     <div class="modal">
                         <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
@@ -50,5 +50,20 @@ class HTMLBank {
                     </div>`;
         return html
     }
+    
+    getUpdatedModalHTML(results, index) {
+        let html = `<img class="modal-img" src=${results[index].picture.thumbnail} alt="profile picture">
+                    <h3 id="name" class="modal-name cap">${results[index].name.first} ${results[index].name.last}</h3>
+                    <p class="modal-text">${results[index].email}</p>
+                    <p class="modal-text cap">${results[index].location.city}</p>
+                    <hr>
+                    <p class="modal-text">${results[index].phone}</p>
+                    <p class="modal-text">${results[index].location.street}</p>
+                    <p class="modal-text">Birthday: ${formatBirthday(results[index].dob.date)}</p>
+                    `;
+        return html;
+    }
+    
+    
     
 }
