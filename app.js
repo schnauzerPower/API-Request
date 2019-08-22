@@ -1,7 +1,7 @@
 const modalContainer = document.createElement('div');
 modalContainer.classList.add('modal-container');
 const gallery = document.getElementById('gallery');
-
+let htmlBank = new HTMLBank();
 
 fetch('https://randomuser.me/api/?results=12')
     .then(response => response.json())
@@ -12,7 +12,7 @@ function createModal(results) {
     gallery.addEventListener('click', (event) => {
         let index = getEventTargetId(event.target); //Locate id of card, which corresponds to index number in the results array
         if(index !== undefined) {
-            modalContainer.innerHTML = getModalHTML(results, index); //HTML is stored in separate function to remove clutter here.
+            modalContainer.innerHTML = htmlBank.getModalHTML(results, index); //HTML is stored in separate function to remove clutter here.
             document.body.appendChild(modalContainer);
             
             //Creat X button functionality
@@ -23,14 +23,45 @@ function createModal(results) {
             
             //Create functionality for 'next' and 'previous' button  ****THIS ONLY WORKS ONCE. I'VE FIGURED OUT IT HAS SOMETHING TO DO WITH REPLACING THE INNER HTML.
             const buttonContainer = document.querySelector('.modal-btn-container');
+            const infoContainer = document.querySelector('.modal-info-container');
             buttonContainer.addEventListener('click', (event) => {
                 if(event.target.id === 'modal-next') {
-                    index++;
-                    modalContainer.innerHTML = getModalHTML(results, index);
+                    if(index === results.length - 1) {
+                        index = 0;
+                    }
+                    else {
+                       index++; 
+                    }
+                    
+                    infoContainer.innerHTML = `
+                        <img class="modal-img" src=${results[index].picture.thumbnail} alt="profile picture">
+                         <h3 id="name" class="modal-name cap">${results[index].name.first} ${results[index].name.last}</h3>
+                        <p class="modal-text">${results[index].email}</p>
+                         <p class="modal-text cap">${results[index].location.city}</p>
+                        <hr>
+                        <p class="modal-text">${results[index].phone}</p>
+                        <p class="modal-text">${results[index].location.street}</p>
+                        <p class="modal-text">Birthday: ${formatBirthday(results[index].dob.date)}</p>
+                    `;
                 }
                 else if(event.target.id === 'modal-prev') {
-                    index--;
-                    modalContainer.innerHTML = getModalHTML(results, index);
+                    if(index === 0) {
+                        index = results.length - 1;
+                    }
+                    else {
+                       index--; 
+                    }
+                    
+                    infoContainer.innerHTML = `
+                        <img class="modal-img" src=${results[index].picture.thumbnail} alt="profile picture">
+                         <h3 id="name" class="modal-name cap">${results[index].name.first} ${results[index].name.last}</h3>
+                        <p class="modal-text">${results[index].email}</p>
+                         <p class="modal-text cap">${results[index].location.city}</p>
+                        <hr>
+                        <p class="modal-text">${results[index].phone}</p>
+                        <p class="modal-text">${results[index].location.street}</p>
+                        <p class="modal-text">Birthday: ${formatBirthday(results[index].dob.date)}</p>
+                    `;
                 }
             })
         } 
@@ -40,8 +71,17 @@ function createModal(results) {
 }
 
 function generateGallery(results) {
-    let html = ''
+    
+    htmlBank.getGalleryHTML(results);
+    /*let html = ''
     let cardId = 0; //An ID will be assigned to each rendered card. This is meant to make it easier to get the correct information in the modal.
+    let html2 = `
+        <form action="#" method="get">
+            <input type="search" id="search-input" class="search-input" placeholder="Search...">
+            <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
+        </form>
+    `;
+    document.querySelector('.search-container').innerHTML = html2;
     for(let result of results) {
         html += `
             <div class="card" id=${cardId}> 
@@ -58,12 +98,31 @@ function generateGallery(results) {
         cardId++;
     }
     
-    gallery.innerHTML = html; 
+    gallery.innerHTML = html;*/ 
+    
+    const submitButton = document.getElementById("search-submit");
+    const searchBar = document.getElementById("search-input");
+    const cards = document.getElementsByClassName('card');
+    const names = document.getElementsByClassName('card-name');
+    submitButton.addEventListener('click', () => {
+        const regEx = new RegExp('^' + searchBar.value.toLowerCase());
+        for(let x = 0; x<cards.length; x++) {
+            if(regEx.test(names[x].textContent)) {
+                cards[x].style.display = 'flex'
+            }
+            else {
+                cards[x].style.display = 'none';
+            }
+            
+        }
+        searchBar.value = '';
+    })
+    
     createModal(results);
 }
 
 //Store the Modal HTML here to clear clutter in createModal function
-function getModalHTML(results, index) {
+/*function getModalHTML(results, index) {
     let html = `
                 <div class="modal">
                     <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
@@ -83,7 +142,7 @@ function getModalHTML(results, index) {
                      </div>
                 </div>`;
     return html
-}
+}*/
 
 function getEventTargetId(element) {
     const id = parseInt(element.id);
