@@ -1,17 +1,18 @@
 class HTMLBank {
     
+    //Store HTML for gallery and assign id to each card that matches the results index for that employee
     getGalleryHTML(results) {
-        let html = ''
+        let contentHtml = ''
         let cardId = 0; //An ID will be assigned to each rendered card. This is meant to make it easier to get the correct information in the modal.
-        let html2 = `
+        let formHtml = `
             <form action="#" method="get">
                 <input type="search" id="search-input" class="search-input" placeholder="Search...">
                 <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
             </form>
         `;
-        document.querySelector('.search-container').innerHTML = html2;
+        document.querySelector('.search-container').innerHTML = formHtml;
         for(let result of results) {
-            html += `
+            contentHtml += `
                 <div class="card" id=${cardId}> 
                     <div class="card-img-container">
                         <img class="card-img" src=${result.picture.thumbnail} alt="profile picture">
@@ -26,9 +27,10 @@ class HTMLBank {
             cardId++;
         }
 
-        gallery.innerHTML = html;
+        gallery.innerHTML = contentHtml;
     }
     
+    //Store complete modal HTML
     getInitialModalHTML(results, index) {
         let html = `
                     <div class="modal">
@@ -40,7 +42,8 @@ class HTMLBank {
                              <p class="modal-text cap">${results[index].location.city}</p>
                             <hr>
                             <p class="modal-text">${results[index].phone}</p>
-                            <p class="modal-text">${results[index].location.street}</p>
+                            <p class="modal-text cap">${results[index].location.street}</p>
+                            <p class="modal-text cap">${results[index].location.city}, ${results[index].location.state} ${results[index].location.postcode}</p>
                             <p class="modal-text">Birthday: ${formatBirthday(results[index].dob.date)}</p>
                          </div>
                          <div class="modal-btn-container">
@@ -51,6 +54,7 @@ class HTMLBank {
         return html
     }
     
+    //Store only modal HTML from modal info container
     getUpdatedModalHTML(results, index) {
         let html = `<img class="modal-img" src=${results[index].picture.thumbnail} alt="profile picture">
                     <h3 id="name" class="modal-name cap">${results[index].name.first} ${results[index].name.last}</h3>
@@ -58,7 +62,8 @@ class HTMLBank {
                     <p class="modal-text cap">${results[index].location.city}</p>
                     <hr>
                     <p class="modal-text">${results[index].phone}</p>
-                    <p class="modal-text">${results[index].location.street}</p>
+                    <p class="modal-text cap">${results[index].location.street}</p>
+                    <p class="modal-text cap">${results[index].location.city}, ${results[index].location.state} ${results[index].location.postcode}</p>
                     <p class="modal-text">Birthday: ${formatBirthday(results[index].dob.date)}</p>
                     `;
         return html;
